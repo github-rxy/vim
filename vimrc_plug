@@ -1,0 +1,165 @@
+syntax on
+syntax enable
+set tabstop=4
+set shiftwidth=4
+set cindent
+set showmatch
+set number
+set autoindent
+set smartindent
+set hlsearch
+set incsearch
+set scrolloff=3
+set ignorecase
+
+set laststatus=2
+set statusline=%F%m%r%h%w%=\ [ft=%Y]\ %{\"[fenc=\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\"+\":\"\").\"]\"}\ [ff=%{&ff}]\ [asc=%03.3b]\ [hex=%02.2B]\ [pos=%l,%v][%p%%]\ [len=%L]
+
+set tags+=./tags;,tags
+"set list lcs=tab:\|\
+
+"taglist commmand
+let Tlist_Show_One_File=1
+let Tlist_Exit_OnlyWindow=1
+nmap <silent> <F9> :TlistToggle<CR>
+"
+highlight WhitespaceEOL ctermbg=blue guibg=red
+highlight Search term=standout ctermfg=0 ctermbg=3 guifg=Black guibg=Yellow
+
+nmap w= :resize +3<CR>
+nmap w- :resize -3<CR>
+nmap w. :vertical resize +3<CR>
+nmap w, :vertical resize -3<CR>
+
+"match WhitespaceEOL /\s\+$/
+
+call plug#begin('~/.vim/plugged')
+Plug 'ludovicchabant/vim-gutentags' 
+Plug 'skywind3000/vim-auto-popmenu'
+Plug 'skywind3000/vim-dict'
+Plug 'itchyny/lightline.vim'
+call plug#end()
+
+" enable this plugin for filetypes, '*' for all files.
+ let g:apc_enable_ft = {'text':1, 'markdown':1, 'php':1, 'c':1}
+
+" source for dictionary, current or other loaded buffers, see ':help cpt'
+set cpt=.,k,w,b
+
+" don't select the first item.
+set completeopt=menu,menuone,noselect
+
+" suppress annoy messages.
+set shortmess+=c
+
+filetype plugin indent on
+
+nmap <silent> <F8> :TagbarToggle<CR>
+let g:tagbar_sort=0 "unsort tag, default sorted
+let g:tagbar_left=1
+let g:tagbar_width=30
+let g:rust_use_custom_ctags_defs = 1  " if using rust.vim
+let g:tagbar_type_rust = {
+			\ 'ctagsbin' : '/usr/local/bin/ctags',
+			\ 'ctagstype' : 'rust',
+			\ 'kinds' : [
+			\ 'n:modules',
+			\ 's:structures:1',
+			\ 'i:interfaces',
+			\ 'c:implementations',
+			\ 'f:functions:1',
+			\ 'g:enumerations:1',
+			\ 't:type aliases:1:0',
+			\ 'v:constants:1:0',
+			\ 'M:macros:1',
+			\ 'm:fields:1:0',
+			\ 'e:enum variants:1:0',
+			\ 'P:methods:1',
+			\ ],
+			\ 'sro': '::',
+			\ 'kind2scope' : {
+			\ 'n': 'module',
+			\ 's': 'struct',
+			\ 'i': 'interface',
+			\ 'c': 'implementation',
+			\ 'f': 'function',
+			\ 'g': 'enum',
+			\ 't': 'typedef',
+			\ 'v': 'variable',
+			\ 'M': 'macro',
+			\ 'm': 'field',
+			\ 'e': 'enumerator',
+			\ 'P': 'method',
+			\ },
+			\ }
+
+set guifont=DejaVu_Sans_Mono_for_Powerline:h12:cANSI
+
+" cscope
+" 控制是否把cscope的输出结果显示在quickfix窗口。’cscopequickfix’包含
+" 多个控制子选项，它们是a,c,d,e,f,g,i,s,t，分别对应cscope
+" find的a,c,d,e,f,g,i,s,t等选项。
+" 每个选项后的’-’表示字cscope有新的输出结果时清除旧的搜索结果。
+" ’+’表示新的搜索结果追加到已有的搜索结果后面。’0’表示该子功能不使用quickfix。
+set cscopequickfix=s-,c-,d-,i-,t-,e-,a-
+"if has("cscope")
+"	"设置cscope二进制可执行文件的绝对路径
+"	set csprg=/usr/bin/cscope
+"	"优先搜索cscope的符号文件
+"	set csto=0
+"	"使用:cstag命令代替:tag/ctrl - ]/vim -t等命令，如果vim加载了cscope的数据库
+"	":cstag命令实际执行的是”cs find g”
+"	set cst 
+"	"不打印cscope所产生的额外信息，也就是在加载cscope数据库时不打印冗余的log
+	set nocsverb
+"	"加载当前路径的cscope数据库文件
+"	if filereadable("cscope.out")
+"		cs add cscope.out
+"		"如果cscope.out不存在于当前路径，加载环境变量CSCOPE_DB指定路径的cscope符号数据库
+"	elseif $CSCOPE_DB != "" 
+"		cs add $CSCOPE_DB
+"	endif
+"	"恢复csverb的初始值
+"	set csverb
+"	nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+"	nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+"	nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+"	nmap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+"	nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+"	nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+"	nmap <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+"	nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+"	nmap <C-\>S :cs find t struct <C-R>=expand("<cword>")<CR> {<CR>
+"    "nmap <C-t> :colder<CR>:cc<CR>
+"endif
+
+let $GTAGSCONF = '/usr/local/share/gtags/gtags.conf'
+"gtags 设置项
+set cscopetag " 使用 cscope 作为 tags 命令
+set cscopeprg='gtags-cscope' " 使用 gtags-cscope 代替 cscope
+let GtagsCscope_Auto_Load = 1
+let CtagsCscope_Auto_Map = 1
+let GtagsCscope_Quiet = 1
+let gtags_file=findfile("GTAGS", ";") "查找 gtags 文件
+if !empty(gtags_file)
+    exe "cs add" gtags_file
+endif
+
+	nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+	nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+	nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+	nmap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+	nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+	nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+	nmap <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+	nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+	nmap <C-\>S :cs find t struct <C-R>=expand("<cword>")<CR> {<CR>
+"nmap <C-\>d :Gtags <C-R>=expand("<cword>")<CR><CR>
+"nmap <C-\>g :Gtags -g <C-R>=expand("<cword>")<CR><CR>
+"nmap <C-\>s :Gtags -s <C-R>=expand("<cword>")<CR><CR>
+"nmap <C-\>r :Gtags -r <C-R><C-W><CR><CR>
+
+
+"set cursorline
+"autocmd ColorScheme * highlight! Cursorline cterm=bold ctermbg=236 guibg=Grey90
+"autocmd ColorScheme * highlight! CursorLineNr cterm=bold ctermfg=159 ctermbg=236 guibg=Grey90
